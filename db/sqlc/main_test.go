@@ -2,24 +2,30 @@ package db
 
 import (
 	"context"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
+	"os"
 	"testing"
 )
 
 var testQueries *Queries
+var testDB *pgxpool.Pool
 
 const (
-	dbDriver = "postgres"
 	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
 )
 
 func TestMain(m *testing.M) {
-	conn, err := pgx.Connect(context.Background(), dbSource)
+	var err error
+	testDB, err = pgxpool.New(context.Background(), dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to database: ", err)
 	}
-	testQueries = New(conn)
 
-	m.Run()
+	testQueries = New(testDB)
+
+	code := m.Run()
+
+	testDB.Close()
+	os.Exit(code)
 }
