@@ -42,7 +42,6 @@ func TestTransferTxDeadLock(t *testing.T) {
 	for i := 0; i < n; i++ {
 		err := <-errs
 		require.NoError(t, err)
-
 	}
 
 	updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
@@ -51,8 +50,8 @@ func TestTransferTxDeadLock(t *testing.T) {
 	updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
 	require.NoError(t, err)
 
-	fmt.Println(">>after:", account1.Balance, account2.Balance)
+	fmt.Println(">>after:", updatedAccount1.Balance, updatedAccount2.Balance)
 
-	require.Equal(t, account1.Balance-int64(n)*amount, updatedAccount1.Balance)
-	require.Equal(t, account2.Balance+int64(n)*amount, updatedAccount2.Balance)
+	require.Equal(t, account1.Balance, updatedAccount1.Balance)
+	require.Equal(t, account2.Balance, updatedAccount2.Balance)
 }
