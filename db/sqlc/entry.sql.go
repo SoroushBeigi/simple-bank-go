@@ -18,19 +18,7 @@ INSERT INTO entries(
 ) RETURNING id, account_id, amount, created_at
 `
 
-type
-
-
-
-
-
-
-
-
-
-
-
-CreateEntryParams struct {
+type CreateEntryParams struct {
 	AccountID int64 `json:"account_id"`
 	Amount    int64 `json:"amount"`
 }
