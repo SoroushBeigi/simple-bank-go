@@ -12,7 +12,7 @@ import (
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
-		log.Fatal("cannot laod config: ", err)
+		log.Fatal("cannot load config: ", err)
 	}
 	conn, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
