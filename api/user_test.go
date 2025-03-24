@@ -44,8 +44,8 @@ func (e eqCreateUserParamsMatcher) String() string {
 	return fmt.Sprintf("matches arg %v and pass %v", e.arg, e.pass)
 }
 
-func EqCreateUserParams(arg db.CreateUserParams, pass string) gomock.Matcher{
-	return eqCreateUserParamsMatcher{arg,pass}
+func EqCreateUserParams(arg db.CreateUserParams, pass string) gomock.Matcher {
+	return eqCreateUserParamsMatcher{arg, pass}
 }
 func TestCreateUserApi(t *testing.T) {
 	user, pass := randomUser(t)
@@ -180,7 +180,7 @@ func TestCreateUserApi(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
 
-			server := NewServer(store)
+			server := NewTestServer(t, store)
 			recorder := httptest.NewRecorder()
 			data, err := json.Marshal(tc.body)
 			require.NoError(t, err)
