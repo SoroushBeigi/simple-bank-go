@@ -118,7 +118,7 @@ func (server *Server) updateAccount(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
+	
 	arg := db.UpdateAccountParams{
 		ID:      req.ID,
 		Balance: req.Balance,
