@@ -1,10 +1,12 @@
 package token
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
 	"github.com/SoroushBeigi/simple-bank-go/util"
+	"github.com/aead/chacha20poly1305"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,6 +33,13 @@ func TestPasetoMaker(t *testing.T) {
 	require.WithinDuration(t, issuedAt, payload.IssuedAt, time.Second)
 	require.WithinDuration(t, expiredAt, payload.ExpiredAt, time.Second)
 
+}
+
+func TestPasetoMakerWithInvalidKeySize(t *testing.T) {
+	const invalidSize = 16
+	maker, err := NewPasetoMaker(util.RandomString(invalidSize))
+	require.Empty(t, maker)
+	require.EqualError(t,err,fmt.Sprintf("invalid key size: exactly %d characters needed",chacha20poly1305.KeySize),)
 }
 
 func TestExpiredPasetoToken(t *testing.T) {

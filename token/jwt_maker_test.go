@@ -1,6 +1,7 @@
 package token
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -31,6 +32,13 @@ func TestJWTMaker(t *testing.T) {
 	require.Equal(t, username, payload.Username)
 	require.WithinDuration(t, issuedAt, payload.IssuedAt, time.Second)
 	require.WithinDuration(t, expiredAt, payload.ExpiredAt, time.Second)
+
+}
+
+func TestJWTMakerWithInvalidSize(t *testing.T) {
+	maker, err := NewJWTMaker(util.RandomString(16))
+	require.Empty(t, maker)
+	require.EqualError(t, err, fmt.Sprintf("Invalid key size: key size must be at least %d chars", minSecretKeySize))
 
 }
 
