@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -28,6 +29,12 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc{
 		if len(fields)<2{
 			err:= errors.New("invalid authorization header format")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized,errorResponse(err))
+			return
+		}
+		authorizationType := strings.ToLower(fields[0])
+		if authorizationType != authorizationTypeBearer {
+			err := fmt.Errorf("unsupported authorization type %s", authorizationType)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
 
